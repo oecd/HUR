@@ -161,7 +161,7 @@ display: flex;
 .axisContext text{
   font-family: 'Noto Sans', sans-serif;
   font-weight: 300;
-  font-size: 1.1rem;
+  font-size: 1.45rem;
   color:#575757;
   stroke:none
 }
@@ -199,4 +199,57 @@ div.tooltip {
     /*transform: translate(-5%,-5%);*/
 
     z-index:2;
+}
+
+@media only screen and (max-width: 850px) {
+
+
+.axisContext text{
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 300;
+  font-size: 1.35rem;
+  color:#575757;
+  stroke:none
+}
+
+
+.legendtext{
+  font-size: 1.2rem;
+}
+
+}
+
+@media only screen and (max-width: 600px) {
+
+
+.axisContext text{
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  color:#575757;
+  stroke:none
+}
+
+.legendtext{
+  font-size: 1.1rem;
+}
+  
+}
+
+
+@media only screen and (max-width: 400px) {
+
+
+.axisContext text{
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 300;
+  font-size: 0.65rem;
+  color:#575757;
+  stroke:none
+}
+
+.legendtext{
+  font-size: 0.9rem;
+}
+  
 }

@@ -24,13 +24,13 @@
 
             dataLayer = [{
 
-                "siteName": "oecd.github.io/HUR",
+                "siteName": "oecd.github.io/HUR/",
 
                 "siteEnvironment": "live",
 
-                "pageLanguage": "fr",         // or "en" or "es"
+                "pageLanguage": "en",         // or "en" or "es"
 
-                "contentLanguage": "French",  // or "English" or "French"
+                "contentLanguage": "English",  // or "English" or "French"
 
                 "pageTopic": "Unemployment",
 
@@ -74,12 +74,12 @@
         
 
             <!--</div>-->
-    <div id="fullembed">
+    <div id="fullembed" >
         <h1>Taux de chômage</h1>
         <h2>% de la population active</h2>
-        <br>
-        <div id="modedemploi">
-           <div id="#intromodedemploi">Sélectionnez un pays:    </div>
+    <br>
+    <div id="modedemploi">
+        <div id="#intromodedemploi">Sélectionnez un pays: </div>
            <div id="selCountry">
                 <select id="country_dropdown" onchange="updatechart(value)">
                     <option value="OECD" selected="selected">OCDE</option>
@@ -89,21 +89,21 @@
         <div id="chart"></div>
     </div>
 
-</body>
+        </body>
 <script>
 
     $(document).ready(function () {
         $('#country_dropdown').select2({ width: '180px' });
     });
 
-    var label = [{ "code": "LRHUTTTT", "label": "Total" },{ "code": "LRHU24TT", "label": "Jeunes (15-24" }, { "code": "LRHUADTT", "label": "25 ans et plus"}, { "code": "LRHUTTFE", "label": "Femmes" },{"code":"LRHUTTMA","label":"Hommes"}]
-    var timeLabel= ["Juin 2020", "Juillet 2020"]
+    var label = [{ "code": "LRHUTTTT", "label": "Total" },{ "code": "LRHU24TT", "label": "Youth (15-24" }, { "code": "LRHUADTT", "label": "Aged 25 and over"}, { "code": "LRHUTTMA", "label": "Men" },{"code":"LRHUTTFE","label":"Women"}]
+    var timeLabel= ["Février 2020","" ,"Juin 2020", "Juillet 2020"]
     var nested ;
 
     var ISOmemory;
 
     var margin = { top: 20, right: 30, bottom: 30, left: 40 },
-        width =  document.getElementById("chart").offsetWidth  - margin.left - margin.right,
+        width = document.getElementById("chart").offsetWidth - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
 
@@ -111,17 +111,20 @@
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    d3.xml("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/STLABOUR/AUS+AUT+BEL+CAN+CHL+COL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+G-7+EA19+BRA+IDN+RUS+ZAF.LRHU24TT+LRHUADTT+LRHUTTFE+LRHUTTMA+LRHUTTTT.STSA.M/all?startTime=2020-06&endTime=2020-07", function (data) {
+    d3.xml("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/STLABOUR/AUS+AUT+BEL+CAN+CHL+COL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+G-7+EA19+BRA+IDN+RUS+ZAF.LRHU24TT+LRHUADTT+LRHUTTFE+LRHUTTMA+LRHUTTTT.STSA.M/all?startTime=2020-02&endTime=2020-07", function (data) {
             data = [].map.call(data.documentElement.getElementsByTagName("Series"), function (serie) {
-             if(( serie.getElementsByTagName("Obs")[1]!==undefined ) ){
+             if(( serie.getElementsByTagName("Obs")[5]!==undefined ) ){
                 return {
                 location: serie.getElementsByTagName("SeriesKey")[0].childNodes[0].getAttribute("value"),
                 measure: serie.getElementsByTagName("SeriesKey")[0].childNodes[1].getAttribute("value"),
-                    value:[ {time:serie.getElementsByTagName("Obs")[0].childNodes[0].childNodes[0].nodeValue,
+                value:[ {time:serie.getElementsByTagName("Obs")[0].childNodes[0].childNodes[0].nodeValue,
                 value: +serie.getElementsByTagName("Obs")[0].childNodes[1].getAttribute("value")
                 }, {
-                    time: serie.getElementsByTagName("Obs")[1].childNodes[0].childNodes[0].nodeValue,
-                    value: +serie.getElementsByTagName("Obs")[1].childNodes[1].getAttribute("value")
+                    time: serie.getElementsByTagName("Obs")[4].childNodes[0].childNodes[0].nodeValue,
+                    value: +serie.getElementsByTagName("Obs")[4].childNodes[1].getAttribute("value")
+                    }, {
+                        time: serie.getElementsByTagName("Obs")[5].childNodes[0].childNodes[0].nodeValue,
+                        value: +serie.getElementsByTagName("Obs")[5].childNodes[1].getAttribute("value")
                     }]
                 };
             }else return {};
@@ -131,30 +134,30 @@
                 .key(k => k.location).sortKeys(d3.ascending)
                 .entries(data);
 
-        var temp = [];
+            var temp=[];
 
-        d3.tsv("data/coord_country.tsv", function (couTemp) {
-            var count = 0;
-            nested.forEach(function (d) {
-                couTemp.forEach(function (k) {
-                    if (k.ISO3 == d.key) {
-                        temp.push({ "Country": k.Country, "ISO3": d.key });
-
-                    }
-                })
-                count++;
-                if (count == nested.length)
+            d3.tsv("data/coord_country.tsv", function (couTemp) {
+                    var count=0;
+                nested.forEach(function (d) {
+                    couTemp.forEach(function (k) { 
+                        if (k.ISO3 == d.key){ 
+                            temp.push({"Country":k.Country,"ISO3":d.key}) ; 
+                            
+                        } 
+                    })
+                    count++;
+                    if  (count==nested.length)
                     updateDropdown()
-            })
-
-        })
-        function updateDropdown() {
+                })
+                
+            })    
+        function updateDropdown(){
             document.getElementById("country_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OCDE</option>";
-
+            
             temp.sort((a, b) => a.Country.localeCompare(b.Country)).forEach(function (k) {
                 nested.forEach(function (d) {
-
-                    if (k.ISO3 == d.key) {
+            
+                    if(k.ISO3==d.key){
                         var x = document.getElementById("country_dropdown");
                         if (d.key != "undefined" && d.key != "OECD") {
                             var option = document.createElement("option");
@@ -164,10 +167,10 @@
 
                         }
                     }
-
+                         
                 })
             })
-
+    
         }
 
         updatechart("OECD") 
@@ -190,10 +193,10 @@
                 .range([0, width]);
 
             var x1 = d3.scaleBand().domain(timeLabel)
-                .range([0, x0.bandwidth() - 10]);
+                .range([0, x0.bandwidth() - x0.bandwidth()/2]);
 
             var z = d3.scaleOrdinal()
-                .range(["#0090ff", "#0b0064"]);
+                .range(["#8EA4B1", "empty","#0090ff", "#0b0064"]);
 
             var svg = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -207,12 +210,16 @@
                 .entries(nested.filter(function (d) { return d.key == ISO3; })[0]["values"]);
 
             var max=0;
+            
             data.forEach(function(k){
                 if(k.values[0].value[0].value>max)
                     max= k.values[0].value[0].value
                 
                 if(k.values[0].value[1].value > max)
                     max = k.values[0].value[1].value
+                   
+                if (k.values[0].value[1].value > max)
+                    max = k.values[0].value[1].value 
 
             })
             
@@ -223,22 +230,22 @@
             data.forEach(function(k){
                 var XLabel;
              
-                if(k.values[0].measure=="LRHUTTTT")
-                    XLabel= "Total"
-                
+                if (k.values[0].measure == "LRHUTTTT")
+                    XLabel = "Total"
+
                 if (k.values[0].measure == "LRHU24TT")
                     XLabel = "Jeunes (15-24)"
-                
+
                 if (k.values[0].measure == "LRHUADTT")
                     XLabel = "25 ans et plus"
-                
+
                 if (k.values[0].measure == "LRHUTTMA")
                     XLabel = "Hommes"
-                
+
                 if (k.values[0].measure == "LRHUTTFE")
                     XLabel = "Femmes"
 
-                chartData.push({"measure": XLabel,"Juin 2020": k.values[0].value[0].value,"Juillet 2020": k.values[0].value[1].value})
+                chartData.push({"measure": XLabel,"Février 2020": k.values[0].value[0].value, "Juin 2020": k.values[0].value[1].value,"Juillet 2020": k.values[0].value[2].value})
             })
 
             
@@ -292,7 +299,7 @@
             svg
                 .append("g")
                 .attr("class", "axisContext")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(" + (- x0.bandwidth() / 4) + "," + height + ")")
                 .call(d3.axisBottom(x0).ticks(8));
 
             svg.append("g")
@@ -301,16 +308,15 @@
                     return y.tickFormat(5, d3.format(".1f"))(d)
                 }).tickSize(-(width)));
 
-               
-
-            var n;
-            if (width < 500)
-                n = 20
-            else
-                n = 35
+           var n;    
+            if (width<500)
+                n=20
+            else 
+                n=35
+            
             svg
                 .append("rect")
-                .attr("x", 2 * n)
+                .attr("x", 2*n)
                 .attr("width", n)
                 .attr("height", n)
                 .attr("fill", z(timeLabel[0]));
@@ -318,27 +324,43 @@
 
             svg
                 .append("rect")
-                .attr("x", 7.5 * n)
+                .attr("x", 7.5*n)
                 .attr("width", n)
                 .attr("height", n)
-                .attr("fill", z(timeLabel[1]));
+                .attr("fill", z(timeLabel[2]));
+            
+            svg
+                .append("rect")
+                .attr("x", 12.5 * n)
+                .attr("width", n)
+                .attr("height", n)
+                .attr("fill", z(timeLabel[3]));
            
-                svg.append("text")
+            svg.append("text")
                 .attr("class", "legendtext")
-                .attr("x", 3.25 * n)
-                .attr("y", n / 2)
+                .attr("x", 3.25*n)
+                .attr("y", n/2)
                 .attr("dy", "0.35em")
                 .text(timeLabel[0]);
 
             svg.append("text")
                 .attr("class", "legendtext")
                 .attr("x", 8.75 * n)
+                .attr("y", n/2)
+                .attr("dy", "0.35em")
+                .text(timeLabel[2]);
+        
+            svg.append("text")
+                .attr("class", "legendtext")
+                .attr("x", 14.25 * n)
                 .attr("y", n / 2)
                 .attr("dy", "0.35em")
-                .text(timeLabel[1]);
-        
+                .text(timeLabel[3]);
 
         }
 
 
+
+
+    $(window).on('resize', function () { updatechart(ISOmemory); });
 </script>

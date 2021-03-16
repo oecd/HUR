@@ -75,14 +75,14 @@
 
             <!--</div>-->
     <div id="fullembed" >
-        <h1>Unemployment rate</h1>
-        <h2>% of labour force</h2>
-        <br>
-        <div id="modedemploi">
-           <div id="#intromodedemploi">Select a country:    </div>
+        <h1>Taux de chômage</h1>
+        <h2>% de la population active</h2>
+    <br>
+    <div id="modedemploi">
+        <div id="#intromodedemploi">Sélectionnez un pays: </div>
            <div id="selCountry">
                 <select id="country_dropdown" onchange="updatechart(value)">
-                    <option value="OECD" selected="selected">OECD</option>
+                    <option value="OECD" selected="selected">OCDE</option>
                 </select>
             </div>
         </div><br>
@@ -97,7 +97,7 @@
     });
 
     var label = [{ "code": "LRHUTTTT", "label": "Total" },{ "code": "LRHU24TT", "label": "Youth (15-24" }, { "code": "LRHUADTT", "label": "Aged 25 and over"}, { "code": "LRHUTTMA", "label": "Men" },{"code":"LRHUTTFE","label":"Women"}]
-    var timeLabel= ["February 2020","" ,"December 2020", "January 2021"]
+    var timeLabel= ["Février 2020","" ,"Décembre 2020", "Janvier 2021"]
     var nested ;
 
     var ISOmemory;
@@ -112,9 +112,8 @@
         .style("opacity", 0);
 
     d3.xml("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/STLABOUR/AUS+AUT+BEL+CAN+CHL+COL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+G-7+EA19+BRA+IDN+RUS+ZAF.LRHU24TT+LRHUADTT+LRHUTTFE+LRHUTTMA+LRHUTTTT.STSA.M/all?startTime=2020-02&endTime=2021-01", function (data) {
-        console.log(data)
             data = [].map.call(data.documentElement.getElementsByTagName("Series"), function (serie) {
-             if(( serie.getElementsByTagName("Obs")[8]!==undefined ) ){
+             if(( serie.getElementsByTagName("Obs")[11]!==undefined ) ){
                 return {
                 location: serie.getElementsByTagName("SeriesKey")[0].childNodes[0].getAttribute("value"),
                 measure: serie.getElementsByTagName("SeriesKey")[0].childNodes[1].getAttribute("value"),
@@ -153,7 +152,7 @@
                 
             })    
         function updateDropdown(){
-            document.getElementById("country_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OECD</option>";
+            document.getElementById("country_dropdown").innerHTML = "<option value=\"OECD\" selected=\"selected\">OCDE</option>";
             
             temp.sort((a, b) => a.Country.localeCompare(b.Country)).forEach(function (k) {
                 nested.forEach(function (d) {
@@ -190,7 +189,7 @@
                 .range([height, 0]);
             
             var x0 = d3.scaleBand()
-                .domain(["Total", "Youth (15-24)", "Aged 25 and over", "Men", "Women"])
+                .domain(["Total", "Jeunes (15-24)", "25 ans et plus", "Femmes", "Hommes"])
                 .range([0, width]);
 
             var x1 = d3.scaleBand().domain(timeLabel)
@@ -231,22 +230,22 @@
             data.forEach(function(k){
                 var XLabel;
              
-                if(k.values[0].measure=="LRHUTTTT")
-                    XLabel= "Total"
-                
-                if (k.values[0].measure == "LRHU24TT")
-                    XLabel = "Youth (15-24)"
-                
-                if (k.values[0].measure == "LRHUADTT")
-                    XLabel = "Aged 25 and over"
-                
-                if (k.values[0].measure == "LRHUTTMA")
-                    XLabel = "Men"
-                
-                if (k.values[0].measure == "LRHUTTFE")
-                    XLabel = "Women"
+                if (k.values[0].measure == "LRHUTTTT")
+                    XLabel = "Total"
 
-                chartData.push({"measure": XLabel,"February 2020": k.values[0].value[0].value, "December 2020": k.values[0].value[1].value,"January 2021": k.values[0].value[2].value})
+                if (k.values[0].measure == "LRHU24TT")
+                    XLabel = "Jeunes (15-24)"
+
+                if (k.values[0].measure == "LRHUADTT")
+                    XLabel = "25 ans et plus"
+
+                if (k.values[0].measure == "LRHUTTMA")
+                    XLabel = "Hommes"
+
+                if (k.values[0].measure == "LRHUTTFE")
+                    XLabel = "Femmes"
+
+                chartData.push({"measure": XLabel,"Février 2020": k.values[0].value[0].value, "Décembre 2020": k.values[0].value[1].value,"Janvier 2021": k.values[0].value[2].value})
             })
 
             
@@ -359,6 +358,8 @@
                 .text(timeLabel[3]);
 
         }
+
+
 
 
     $(window).on('resize', function () { updatechart(ISOmemory); });

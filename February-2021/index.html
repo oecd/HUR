@@ -97,7 +97,7 @@
     });
 
     var label = [{ "code": "LRHUTTTT", "label": "Total" },{ "code": "LRHU24TT", "label": "Youth (15-24" }, { "code": "LRHUADTT", "label": "Aged 25 and over"}, { "code": "LRHUTTMA", "label": "Men" },{"code":"LRHUTTFE","label":"Women"}]
-    var timeLabel= ["February 2020","" ,"January 2021", "February 2021"]
+    var timeLabel= ["February 2020","" ,"December 2020", "January 2021"]
     var nested ;
 
     var ISOmemory;
@@ -111,7 +111,7 @@
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    d3.xml("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/STLABOUR/AUS+AUT+BEL+CAN+CHL+COL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+G-7+EA19+BRA+IDN+RUS+ZAF.LRHU24TT+LRHUADTT+LRHUTTFE+LRHUTTMA+LRHUTTTT.STSA.M/all?startTime=2020-02&endTime=2021-02", function (data) {
+    d3.xml("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/STLABOUR/AUS+AUT+BEL+CAN+CHL+COL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+G-7+EA19+BRA+IDN+RUS+ZAF.LRHU24TT+LRHUADTT+LRHUTTFE+LRHUTTMA+LRHUTTTT.STSA.M/all?startTime=2020-02&endTime=2021-01", function (data) {
         console.log(data)
             data = [].map.call(data.documentElement.getElementsByTagName("Series"), function (serie) {
              if(( serie.getElementsByTagName("Obs")[8]!==undefined ) ){
@@ -121,11 +121,11 @@
                 value:[ {time:serie.getElementsByTagName("Obs")[0].childNodes[0].childNodes[0].nodeValue,
                 value: +serie.getElementsByTagName("Obs")[0].childNodes[1].getAttribute("value")
                 }, {
-                    time: serie.getElementsByTagName("Obs")[11].childNodes[0].childNodes[0].nodeValue,
-                    value: +serie.getElementsByTagName("Obs")[11].childNodes[1].getAttribute("value")
+                    time: serie.getElementsByTagName("Obs")[10].childNodes[0].childNodes[0].nodeValue,
+                    value: +serie.getElementsByTagName("Obs")[10].childNodes[1].getAttribute("value")
                     }, {
-                        time: serie.getElementsByTagName("Obs")[12].childNodes[0].childNodes[0].nodeValue,
-                        value: +serie.getElementsByTagName("Obs")[12].childNodes[1].getAttribute("value")
+                        time: serie.getElementsByTagName("Obs")[11].childNodes[0].childNodes[0].nodeValue,
+                        value: +serie.getElementsByTagName("Obs")[11].childNodes[1].getAttribute("value")
                     }]
                 };
             }else return {};
@@ -246,7 +246,7 @@
                 if (k.values[0].measure == "LRHUTTFE")
                     XLabel = "Women"
 
-                chartData.push({"measure": XLabel,"February 2020": k.values[0].value[0].value, "January 2021": k.values[0].value[1].value,"February 2021": k.values[0].value[2].value})
+                chartData.push({"measure": XLabel,"February 2020": k.values[0].value[0].value, "December 2020": k.values[0].value[1].value,"January 2021": k.values[0].value[2].value})
             })
 
             
